@@ -1,6 +1,7 @@
 import Mathlib.Algebra.Central.Defs
 import Mathlib.LinearAlgebra.Dimension.Basic
 import Mathlib.RingTheory.Finiteness.Defs
+import Mathlib.LinearAlgebra.FiniteDimensional
 
 class IsQuaternionAlgebra (F : Type*) [Field F] (D : Type*) [Ring D] [Algebra F D] : Prop where
   isSimpleRing : IsSimpleRing D
@@ -14,5 +15,4 @@ attribute [instance] isSimpleRing isCentral
 variable (F : Type*) [Field F] (D : Type*) [Ring D] [Algebra F D] [IsQuaternionAlgebra F D]
 
 instance : Module.Finite F D := by
-  have := dim_four (F := F) (D := D)
-  sorry
+  apply FiniteDimensional.of_rank_eq_nat dim_four
