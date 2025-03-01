@@ -15,4 +15,5 @@ attribute [instance] isSimpleRing isCentral
 variable (F : Type*) [Field F] (D : Type*) [Ring D] [Algebra F D] [IsQuaternionAlgebra F D]
 
 instance : Module.Finite F D := by
-  apply FiniteDimensional.of_rank_eq_nat dim_four
+  have foo := dim_four (F := F) (D := D)
+  exact Module.finite_of_rank_eq_nat foo
