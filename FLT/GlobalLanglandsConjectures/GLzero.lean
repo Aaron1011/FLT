@@ -6,6 +6,7 @@ Authors: Kevin Buzzard, Jonas Bayer
 import Mathlib.RingTheory.DedekindDomain.Ideal
 import Mathlib.RingTheory.IntegralClosure.IntegralRestrict
 import Mathlib.FieldTheory.Cardinality
+import Mathlib.LinearAlgebra.FiniteDimensional
 import FLT.GlobalLanglandsConjectures.GLnDefs
 /-
 
@@ -55,6 +56,10 @@ namespace GL0
 
 variable (ρ : Weight 0)
 
+attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNormedSpace
+  Matrix.linftyOpNormedRing Matrix.linftyOpNormedAlgebra
+
+
 def ofComplex (c : ℂ) : AutomorphicFormForGLnOverQ 0 ρ := {
     toFun := fun _ => c,
     is_smooth := {
@@ -79,9 +84,43 @@ def ofComplex (c : ℂ) : AutomorphicFormForGLnOverQ 0 ρ := {
       rw [FiniteDimensional]
       rw [annihilator]
       simp
-      exact {
-        fg_top := by sorry
-      }
+      apply FiniteDimensional.of_rank_eq_nat (n := 0)
+      apply (@rank_zero_iff _ _ _ _ _ _ ?_).mpr
+      .
+        --unfold HasQuotient.Quotient HasQuotient.quotient'
+        apply @Quotient.instSubsingletonQuotient _ _ ?_
+        apply @instSubsingletonSubtype_mathlib _ ?_ _
+        unfold Alg
+
+        have matrix_sub: Subsingleton (Matrix (Fin 0) (Fin 0) ℝ) := by
+          simp [Matrix]
+          exact Pi.instSubsingleton
+
+        have is_sub: Subsingleton (ModelWithCorners ℝ (Matrix (Fin 0) (Fin 0) ℝ) (Matrix (Fin 0) (Fin 0) ℝ)) := by
+          exact {
+            allEq f g := by
+              ext a b c <;> simp_all
+              . have foo := b.isLt
+                linarith
+              . have foo := b.isLt
+                linarith
+              .
+                constructor
+                . intro have_y
+                  obtain ⟨y, hy⟩ := have_y
+                  use y
+                  exact matrix_sub.allEq _ a
+                . intro have_y
+                  obtain ⟨y, hy⟩ := have_y
+                  use y
+                  exact (matrix_sub.allEq a _).symm
+          }
+
+        apply Subalgebra.subsingleton_of_subsingleton
+      -- I don't know how to prove this
+      . sorry
+      --apply?
+
     has_finite_level := by
       let U : Subgroup (GL (Fin 0) (DedekindDomain.FiniteAdeleRing ℤ ℚ)) := {
         carrier := {1},
