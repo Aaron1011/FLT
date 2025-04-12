@@ -95,10 +95,23 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
           simp
           exact id (Eq.symm hb)
 
-        done
+
+    have iso := RingHom.quotientKerEquivRange (PadicInt.toZModPow (x.val.valuation) (p := p)) (R := ℤ_[p])
+    have ker_equiv := PadicInt.ker_toZModPow (x.val.valuation) (p := p)
+
+    have foo := Ideal.quotEquivOfEq ker_equiv
+
+    dsimp [AddSubgroup.relindex, AddSubgroup.index]
+    unfold K
+    simp
+
+    have top_eq_self := (Submodule.topEquiv (R := ℤ_[p]) (M := ℤ_[p]))
+
+    have bar := Ideal.quotEquivOfEq )
 
 
 
+    rw [PadicInt.ker_toZModPow] at iso
     sorry
   sorry
 
