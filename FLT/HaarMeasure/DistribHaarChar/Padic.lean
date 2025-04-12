@@ -26,10 +26,21 @@ p-adic/p-adic integer and `s` is a set of p-adics/p-adic integers.
   `s : Set ℤ_[p]`.
 -/
 
+-- lemma quotient_equiv {R M: Type*} [Ring R] [AddCommGroup M] [Module R M] (p: Submodule R M):
+--   Nat.card (M ⧸ p) = Nat.card (AddSubgroup M ⧸ p.toAddSubgroup) := by
+--   sorry
+
 open Padic MeasureTheory Measure Metric Set
 open scoped Pointwise ENNReal NNReal nonZeroDivisors
 
 variable {p : ℕ} [Fact p.Prime]
+
+lemma nat_enn_of (n: ℕ): (n: ENNReal) = ENNReal.ofNNReal n := by
+  norm_cast
+
+lemma nat_nnreal_cast (n: ℕ): (n: ℝ≥0) = ⟨n, by linarith⟩ := by
+  norm_cast
+
 
 private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     distribHaarChar ℚ_[p] (x : ℚ_[p]ˣ) = ‖(x : ℚ_[p])‖₊ := by
@@ -95,29 +106,78 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
           simp
           exact id (Eq.symm hb)
 
+    have iso := RingHom.quotientKerEquivOfSurjective (f := PadicInt.toZModPow (x.val.valuation) (p := p)) (R := ℤ_[p]) (ZMod.ringHom_surjective (PadicInt.toZModPow (x.val).valuation))
+    have card_eq := Nat.card_congr iso.toEquiv
+    simp at card_eq
 
-    have iso := RingHom.quotientKerEquivOfSurjective (f := PadicInt.toZModPow (x.val.valuation) (p := p)) (R := ℤ_[p]) (ZMod.ringHom_surjective (PadicInt.toZModPow (↑x).valuation))
     have ker_equiv := PadicInt.ker_toZModPow (x.val.valuation) (p := p)
 
     have foo := Ideal.quotEquivOfEq ker_equiv
 
+    have other_card_eq := Nat.card_congr foo.toEquiv
+    simp at other_card_eq
+    rw [other_card_eq] at card_eq
+
+    have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
+      sorry
+
+
     dsimp [AddSubgroup.relindex, AddSubgroup.index]
-    unfold K
+    rw [Nat.card_congr subgroup_equiv]
+    rw [card_eq]
+    rw [← nnnorm_inv]
+    norm_cast
+    simp only [Nat.cast_pow, nnnorm, PadicInt.padic_norm_e_of_padicInt, H, K]
+    norm_cast
+    rw [nat_nnreal_cast]
+    rw [Subtype.ext_iff_val]
     simp
 
-    have top_eq_self := (Submodule.topEquiv (R := ℤ_[p]) (M := ℤ_[p]))
+
+    simp_rw [PadicInt.norm_eq_zpow_neg_valuation x_nonzero]
+    field_simp
+    -- norm_cast
+
+
+
+    -- unfold K
+    -- simp
+
+
+    -- unfold K at my_card_eq
+    -- rw [my_card_eq]
+
+    -- have foo := Subgroup.index
+
+
+
+    -- have top_eq_self := (Submodule.topEquiv (R := ℤ_[p]) (M := ℤ_[p]))
+    -- simp [nnnorm]
+    -- simp_rw [PadicInt.norm_eq_zpow_neg_valuation x_nonzero]
+    -- field_simp
+    -- norm_cast
+
+    -- have group_iso := QuotientAddGroup.quotientAddEquivOfEq (G := (⊤: AddSubgroup ℤ_[p]))
+
+    -- --have add_comm := Submodule.Quotient.addCommGroup (Ideal.span {↑(p ^ (x.val).valuation)}) (R := ℤ_[p]) (M := ℤ_[p])
 
 
 
 
-    unfold K
-    unfold AddSubgroup.relindex
-    simp
+    -- --simp_rw [PadicInt.norm_def]
+    -- --rw [Padic.norm_eq_zpow_neg_valuation x_nonzero]
 
 
 
-    rw [PadicInt.ker_toZModPow] at iso
-    sorry
+
+    -- unfold K
+    -- unfold AddSubgroup.relindex
+    -- simp
+
+
+
+    -- rw [PadicInt.ker_toZModPow] at iso
+    -- sorry
   sorry
 
 
