@@ -118,8 +118,22 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     simp at other_card_eq
     rw [other_card_eq] at card_eq
 
+    have mem_add := Submodule.mem_toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}) (x := 0)
+
+
     have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
-      sorry
+      exact {
+        toFun := fun y => by
+          exact Submodule.Quotient.mk (y.out)
+        invFun := fun y => by
+          unfold K
+          simp
+          exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
+        left_inv := by
+          sorry
+        right_inv := by
+          sorry
+      }
 
 
     dsimp [AddSubgroup.relindex, AddSubgroup.index]
