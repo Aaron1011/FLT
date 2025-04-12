@@ -80,6 +80,21 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
           exact Exists.intro (m * ↑(PadicInt.unitCoeff x_nonzero)) (id (Eq.symm hm))
 
         . intro hy
+          simp
+          rw [← Submodule.singleton_set_smul]
+          rw [Submodule.mem_singleton_set_smul]
+          simp
+          simp [mul_assoc]
+          simp [mul_comm]
+          simp [← mul_assoc]
+          simp [mul_comm]
+
+          rw [Ideal.mem_span_singleton'] at hy
+          obtain ⟨b, hb⟩ := hy
+          use (b * ↑(PadicInt.unitCoeff x_nonzero)⁻¹)
+          simp
+          exact id (Eq.symm hb)
+
         done
 
 
