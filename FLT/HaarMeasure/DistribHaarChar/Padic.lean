@@ -243,8 +243,14 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
   let K_old : AddSubgroup ℚ_[p] := (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup
   let H_old:= (x : ℚ_[p]) • K_old
 
+  have hHK_old : H_old ≤ K_old := by
+    simpa [H, K, -Submodule.smul_le_self_of_tower]
+      using (1 : Submodule ℤ_[p] ℚ_[p]).smul_le_self_of_tower (x : ℤ_[p])
 
   have something := AddSubgroup.relindex_comap (H := H_old) (f := my_coe) (K := (⊤ : AddSubgroup ℤ_[p]))
+
+  have : H_old.FiniteRelIndex K_old :=
+    PadicInt.smul_submodule_finiteRelIndex (p := p) (mem_nonZeroDivisors_iff_ne_zero.1 x.2) 1
 
   have map_top: (AddSubgroup.map my_coe ⊤) = K_old := by
     ext a
@@ -259,14 +265,39 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
       simp
       exact ha
 
+  have map_h_old: (AddSubgroup.comap my_coe H_old) = H := by
+    ext a
+    unfold my_coe H_old H K_old
+    refine ⟨?_, ?_⟩
+    . intro ha
+      simp at ha
+      simp
+      rw [Submodule.one_eq_span] at ha
+      sorry
+
+      --exact ha
+    . intro ha
+      simp at ha
+      simp
+      sorry
+      --exact ha
+
   rw [map_top] at something
+  rw [map_h_old] at something
+
+  rw [something] at H_relindex_Z
+
+  refine distribHaarChar_eq_of_measure_smul_eq_mul (s := K_old) (μ := volume) (G := ℚ_[p]ˣ)
+    (by simp [K_old, Padic.submodule_one_eq_closedBall, closedBall, Padic.volume_closedBall_one])
+    (by simp [K_old, Padic.submodule_one_eq_closedBall, closedBall, Padic.volume_closedBall_one]) ?_
+  change volume (H_old : Set ℚ_[p]) = ‖(x : ℚ_[p])‖₊ * volume (K_old : Set ℚ_[p])
 
 
-  simp [my_coe] at something
-  simp [AddSubgroup.comap] at something
+  -- simp [my_coe] at something
+  -- simp [AddSubgroup.comap] at something
 
-  have H_relindex_Z_old : (H_old.relindex K_old : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
-    dsimp [AddSubgroup.relindex, AddSubgroup.index]
+  -- have H_relindex_Z_old : (H_old.relindex K_old : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
+  --   dsimp [AddSubgroup.relindex, AddSubgroup.index]
 
 
 
@@ -275,14 +306,14 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
   --have top_index_k: (⊤: AddSubgroup ℤ_[p]).relindex ((1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup) = 1 := by
   --  sorry
 
-  rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK, H_relindex_Z, ENNReal.coe_inv,
+  rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK_old, H_relindex_Z, ENNReal.coe_inv,
     ENNReal.mul_inv_cancel_left]
   · simp
   · simp
   · simp
-  · simpa [H, K, Padic.submodule_one_eq_closedBall]
+  · simpa [H_old, K_old, Padic.submodule_one_eq_closedBall]
       using measurableSet_closedBall.const_smul (x : ℚ_[p]ˣ)
-  · simpa [K, Padic.submodule_one_eq_closedBall] using measurableSet_closedBall
+  · simpa [K_old, Padic.submodule_one_eq_closedBall] using measurableSet_closedBall
 
 /-- The distributive Haar character of the action of `ℚ_[p]ˣ` on `ℚ_[p]` is the usual p-adic norm.
 
