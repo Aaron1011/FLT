@@ -202,22 +202,19 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
 
     -- rw [PadicInt.ker_toZModPow] at iso
     -- sorry
-  sorry
+  rw [← AddSubgroup.relindex_top_right] at H_relindex_Z
 
+  have top_index_k: (⊤: AddSubgroup ℤ_[p]).relindex ((1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup) = 1 := by
+    sorry
 
-
-
-
-
-  --   --congr(ENNReal.ofNNReal $(PadicInt.smul_submodule_relindex (p := p) x 1))
-  -- rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK, H_relindex_Z, ENNReal.coe_inv,
-  --   ENNReal.mul_inv_cancel_left]
-  -- · simp
-  -- · simp
-  -- · simp
-  -- · simpa [H, K, Padic.submodule_one_eq_closedBall]
-  --     using measurableSet_closedBall.const_smul (x : ℚ_[p]ˣ)
-  -- · simpa [K, Padic.submodule_one_eq_closedBall] using measurableSet_closedBall
+  rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK, H_relindex_Z, ENNReal.coe_inv,
+    ENNReal.mul_inv_cancel_left]
+  · simp
+  · simp
+  · simp
+  · simpa [H, K, Padic.submodule_one_eq_closedBall]
+      using measurableSet_closedBall.const_smul (x : ℚ_[p]ˣ)
+  · simpa [K, Padic.submodule_one_eq_closedBall] using measurableSet_closedBall
 
 /-- The distributive Haar character of the action of `ℚ_[p]ˣ` on `ℚ_[p]` is the usual p-adic norm.
 
