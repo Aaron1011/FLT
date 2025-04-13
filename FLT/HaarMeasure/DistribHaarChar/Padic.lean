@@ -123,7 +123,7 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
 
     have mem_add := Submodule.mem_toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}) (x := 0)
 
-    have wtf: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
+    have quotients_are_defeq: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
       rfl
 
     -- have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
@@ -145,7 +145,7 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
 
 
     dsimp [AddSubgroup.index]
-    rw [wtf]
+    rw [quotients_are_defeq]
     rw [card_eq]
     rw [← nnnorm_inv]
     norm_cast
