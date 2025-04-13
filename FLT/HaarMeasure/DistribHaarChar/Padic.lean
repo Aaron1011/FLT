@@ -126,6 +126,28 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     have wtf: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
       rfl
 
+    have equiv_z_p_one: (⊤ : AddSubgroup ℤ_[p]).carrier ≃ (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup.carrier := by
+      exact {
+        toFun := fun y => by
+          let z := (y.val • (1 : ℚ_[p]))
+          simp [Submodule.toAddSubgroup]
+          unfold Submodule.toAddSubmonoid
+
+          dsimp [Submodule.one]
+          exact z
+
+
+
+        invFun := fun y => by
+          unfold K
+          simp
+          exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
+        left_inv := by
+          sorry
+        right_inv := by
+          sorry
+      }
+
 
 
     -- have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
@@ -204,8 +226,24 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     -- sorry
   rw [← AddSubgroup.relindex_top_right] at H_relindex_Z
 
-  have top_index_k: (⊤: AddSubgroup ℤ_[p]).relindex ((1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup) = 1 := by
-    sorry
+  let embed_z: (ℤ_[p] →+ ℚ_[p]) := LinearMap.toSpanSingleton ℤ_[p] ℚ_[p] 1
+  have comap_index := AddSubgroup.relindex_comap (f := embed_z) (H := (⊤: AddSubgroup ℚ_[p])) (G' := ℤ_[p]) ⊤
+
+
+
+
+  let K_old : AddSubgroup ℚ_[p] := (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup
+  let H_old:= (x : ℚ_[p]) • K_old
+
+  have H_relindex_Z_old : (H_old.relindex K_old : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
+    dsimp [AddSubgroup.relindex, AddSubgroup.index]
+
+
+
+  --have comap_index := AddSubgroup.relindex_comap (f := LinearMap.toSpanSingleton ℤ_[p] ℚ_[p] 1) (H := (⊤: ↥(Submodule.toAddSubgroup 1))) (G := (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup)
+
+  --have top_index_k: (⊤: AddSubgroup ℤ_[p]).relindex ((1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup) = 1 := by
+  --  sorry
 
   rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK, H_relindex_Z, ENNReal.coe_inv,
     ENNReal.mul_inv_cancel_left]
