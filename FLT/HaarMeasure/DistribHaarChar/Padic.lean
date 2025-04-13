@@ -126,30 +126,6 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     have wtf: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
       rfl
 
-    have equiv_z_p_one: (⊤ : AddSubgroup ℤ_[p]).carrier ≃ (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup.carrier := by
-      exact {
-        toFun := fun y => by
-          let z := (y.val • (1 : ℚ_[p]))
-          simp [Submodule.toAddSubgroup]
-          unfold Submodule.toAddSubmonoid
-
-          dsimp [Submodule.one]
-          exact z
-
-
-
-        invFun := fun y => by
-          unfold K
-          simp
-          exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
-        left_inv := by
-          sorry
-        right_inv := by
-          sorry
-      }
-
-
-
     -- have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
     --   exact {
     --     toFun := fun y => by
