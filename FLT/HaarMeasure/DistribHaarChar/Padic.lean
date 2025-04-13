@@ -41,6 +41,9 @@ lemma nat_enn_of (n: ℕ): (n: ENNReal) = ENNReal.ofNNReal n := by
 lemma nat_nnreal_cast (n: ℕ): (n: ℝ≥0) = ⟨n, by linarith⟩ := by
   norm_cast
 
+lemma subgroup_bot   {G : Type*} [AddGroup G] (H : AddSubgroup G): H.addSubgroupOf ⊤ = ⊤ := by
+  simp
+
 
 private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     distribHaarChar ℚ_[p] (x : ℚ_[p]ˣ) = ‖(x : ℚ_[p])‖₊ := by
@@ -58,7 +61,7 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
       using (1 : Submodule ℤ_[p] ℚ_[p]).smul_le_self_of_tower (x : ℤ_[p])
   --have : H.FiniteRelIndex K :=
   --  PadicInt.smul_submodule_finiteRelIndex (p := p) (mem_nonZeroDivisors_iff_ne_zero.1 x.2) 1
-  have H_relindex_Z : (H.relindex K : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
+  have H_relindex_Z : (H.index : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
     have x_nonzero: x.val ≠ 0 := by
       exact nonZeroDivisors.ne_zero x.prop
 
@@ -120,24 +123,31 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
 
     have mem_add := Submodule.mem_toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}) (x := 0)
 
-
-    have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
-      exact {
-        toFun := fun y => by
-          exact Submodule.Quotient.mk (y.out)
-        invFun := fun y => by
-          unfold K
-          simp
-          exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
-        left_inv := by
-          sorry
-        right_inv := by
-          sorry
-      }
+    have wtf: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
+      rfl
 
 
-    dsimp [AddSubgroup.relindex, AddSubgroup.index]
-    rw [Nat.card_congr subgroup_equiv]
+
+    -- have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
+    --   exact {
+    --     toFun := fun y => by
+    --       exact Submodule.Quotient.mk (y.out)
+    --     invFun := fun y => by
+    --       unfold K
+    --       simp
+    --       exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
+    --     left_inv := by
+    --       sorry
+    --     right_inv := by
+    --       sorry
+    --   }
+
+    -- have foo: 1 = 1 := by
+    --   sorry
+
+
+    dsimp [AddSubgroup.index]
+    rw [wtf]
     rw [card_eq]
     rw [← nnnorm_inv]
     norm_cast
