@@ -126,24 +126,6 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     have quotients_are_defeq: (ℤ_[p] ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation}))) = (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
       rfl
 
-    -- have subgroup_equiv: (↥K ⧸ (Submodule.toAddSubgroup (Ideal.span {(p : ℤ_[p]) ^ (x.val).valuation})).addSubgroupOf K) ≃ (ℤ_[p] ⧸ Ideal.span {(p: ℤ_[p]) ^ (x.val).valuation}) := by
-    --   exact {
-    --     toFun := fun y => by
-    --       exact Submodule.Quotient.mk (y.out)
-    --     invFun := fun y => by
-    --       unfold K
-    --       simp
-    --       exact QuotientAddGroup.mk (Submodule.topEquiv.symm (R := ℤ_[p]) y.out)
-    --     left_inv := by
-    --       sorry
-    --     right_inv := by
-    --       sorry
-    --   }
-
-    -- have foo: 1 = 1 := by
-    --   sorry
-
-
     dsimp [AddSubgroup.index]
     rw [quotients_are_defeq]
     rw [card_eq]
@@ -158,48 +140,7 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
 
     simp_rw [PadicInt.norm_eq_zpow_neg_valuation x_nonzero]
     field_simp
-    -- norm_cast
 
-
-
-    -- unfold K
-    -- simp
-
-
-    -- unfold K at my_card_eq
-    -- rw [my_card_eq]
-
-    -- have foo := Subgroup.index
-
-
-
-    -- have top_eq_self := (Submodule.topEquiv (R := ℤ_[p]) (M := ℤ_[p]))
-    -- simp [nnnorm]
-    -- simp_rw [PadicInt.norm_eq_zpow_neg_valuation x_nonzero]
-    -- field_simp
-    -- norm_cast
-
-    -- have group_iso := QuotientAddGroup.quotientAddEquivOfEq (G := (⊤: AddSubgroup ℤ_[p]))
-
-    -- --have add_comm := Submodule.Quotient.addCommGroup (Ideal.span {↑(p ^ (x.val).valuation)}) (R := ℤ_[p]) (M := ℤ_[p])
-
-
-
-
-    -- --simp_rw [PadicInt.norm_def]
-    -- --rw [Padic.norm_eq_zpow_neg_valuation x_nonzero]
-
-
-
-
-    -- unfold K
-    -- unfold AddSubgroup.relindex
-    -- simp
-
-
-
-    -- rw [PadicInt.ker_toZModPow] at iso
-    -- sorry
   rw [← AddSubgroup.relindex_top_right] at H_relindex_Z
 
 
@@ -289,20 +230,6 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     (by simp [K_old, Padic.submodule_one_eq_closedBall, closedBall, Padic.volume_closedBall_one])
     (by simp [K_old, Padic.submodule_one_eq_closedBall, closedBall, Padic.volume_closedBall_one]) ?_
   change volume (H_old : Set ℚ_[p]) = ‖(x : ℚ_[p])‖₊ * volume (K_old : Set ℚ_[p])
-
-
-  -- simp [my_coe] at something
-  -- simp [AddSubgroup.comap] at something
-
-  -- have H_relindex_Z_old : (H_old.relindex K_old : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
-  --   dsimp [AddSubgroup.relindex, AddSubgroup.index]
-
-
-
-  --have comap_index := AddSubgroup.relindex_comap (f := LinearMap.toSpanSingleton ℤ_[p] ℚ_[p] 1) (H := (⊤: ↥(Submodule.toAddSubgroup 1))) (G := (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup)
-
-  --have top_index_k: (⊤: AddSubgroup ℤ_[p]).relindex ((1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup) = 1 := by
-  --  sorry
 
   rw [← index_mul_addHaar_addSubgroup_eq_addHaar_addSubgroup hHK_old, H_relindex_Z, ENNReal.coe_inv,
     ENNReal.mul_inv_cancel_left]
