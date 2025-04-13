@@ -272,9 +272,17 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     . intro ha
       simp at ha
       simp
+      rw [AddSubgroup.mem_smul_pointwise_iff_exists] at ha
+      rw [AddSubgroup.mem_smul_pointwise_iff_exists]
       rw [Submodule.one_eq_span] at ha
-      sorry
-
+      simp at ha
+      simp_rw [Submodule.mem_span_singleton] at ha
+      simp at ha
+      obtain ⟨s, hs⟩ := ha
+      use s
+      simp
+      rw [mul_comm]
+      exact PadicInt.ext hs
       --exact ha
     . intro ha
       simp at ha
