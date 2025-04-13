@@ -226,14 +226,44 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     -- sorry
   rw [← AddSubgroup.relindex_top_right] at H_relindex_Z
 
+
+
   let embed_z: (ℤ_[p] →+ ℚ_[p]) := LinearMap.toSpanSingleton ℤ_[p] ℚ_[p] 1
   have comap_index := AddSubgroup.relindex_comap (f := embed_z) (H := (⊤: AddSubgroup ℚ_[p])) (G' := ℤ_[p]) ⊤
 
+  -- TODO - does this already exist somewhere?
+  let my_coe: ℤ_[p] →+ ℚ_[p] := {
+    toFun := Subtype.val
+    map_zero' := by simp
+    map_add' := by simp
+  }
 
 
 
   let K_old : AddSubgroup ℚ_[p] := (1 : Submodule ℤ_[p] ℚ_[p]).toAddSubgroup
   let H_old:= (x : ℚ_[p]) • K_old
+
+
+  have something := AddSubgroup.relindex_comap (H := H_old) (f := my_coe) (K := (⊤ : AddSubgroup ℤ_[p]))
+
+  have map_top: (AddSubgroup.map my_coe ⊤) = K_old := by
+    ext a
+    unfold my_coe K_old
+    refine ⟨?_, ?_⟩
+    . intro ha
+      simp at ha
+      simp
+      exact ha
+    . intro ha
+      simp at ha
+      simp
+      exact ha
+
+  rw [map_top] at something
+
+
+  simp [my_coe] at something
+  simp [AddSubgroup.comap] at something
 
   have H_relindex_Z_old : (H_old.relindex K_old : ℝ≥0∞) = ‖(x : ℚ_[p])‖₊⁻¹ := by
     dsimp [AddSubgroup.relindex, AddSubgroup.index]
