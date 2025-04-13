@@ -287,8 +287,22 @@ private lemma distribHaarChar_padic_padicInt (x : ℤ_[p]⁰) :
     . intro ha
       simp at ha
       simp
-      sorry
-      --exact ha
+
+      rw [AddSubgroup.mem_smul_pointwise_iff_exists] at ha
+      rw [AddSubgroup.mem_smul_pointwise_iff_exists]
+      rw [Submodule.one_eq_span]
+      simp
+      simp_rw [Submodule.mem_span_singleton]
+      simp
+
+      obtain ⟨s, hs⟩ := ha
+      use s
+      simp at hs
+      rw [mul_comm] at hs
+      dsimp [HSMul.hSMul, SMul.smul]
+      rw [← PadicInt.coe_mul]
+      rw [hs]
+
 
   rw [map_top] at something
   rw [map_h_old] at something
